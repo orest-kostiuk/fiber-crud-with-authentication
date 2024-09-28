@@ -5,8 +5,8 @@ import (
 	"github.com/orest-kostiuk/fiber-test/app/controllers/postsController"
 )
 
-func SetupPostRoutes(router fiber.Router) {
-	postRoutes := router.Group("/posts")
+func SetupPostRoutes(router fiber.Router, auth func(c *fiber.Ctx) error) {
+	postRoutes := router.Group("/posts", auth)
 
 	postRoutes.Post("/", postsController.PostsCreate)
 	postRoutes.Get("/", postsController.PostsIndex)
