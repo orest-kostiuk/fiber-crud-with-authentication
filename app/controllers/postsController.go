@@ -2,11 +2,13 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/orest-kostiuk/fiber-test/initializers"
-	"github.com/orest-kostiuk/fiber-test/models"
+	"github.com/orest-kostiuk/fiber-test/app/models"
+	"github.com/orest-kostiuk/fiber-test/database"
 )
 
 func PostsCreate(c *fiber.Ctx) error {
+	db := database.DB
+
 	var body struct {
 		Title string
 		Body  string
@@ -18,7 +20,7 @@ func PostsCreate(c *fiber.Ctx) error {
 	}
 
 	post := models.Post{Title: body.Title, Body: body.Body}
-	result := initializers.DB.Create(&post)
+	result := db.Create(&post)
 
 	if result.Error != nil {
 		err := c.Status(400).JSON(fiber.Map{"error": "Failed to create post"})
@@ -34,8 +36,10 @@ func PostsCreate(c *fiber.Ctx) error {
 }
 
 func PostsIndex(c *fiber.Ctx) error {
+	db := database.DB
+
 	var posts []models.Post
-	initializers.DB.Find(&posts)
+	db.Find(&posts)
 
 	err := c.JSON(fiber.Map{"posts": posts})
 
@@ -46,9 +50,11 @@ func PostsIndex(c *fiber.Ctx) error {
 }
 
 func PostShow(c *fiber.Ctx) error {
+	db := database.DB
+
 	id := c.Params("id")
 	var post models.Post
-	initializers.DB.Find(&post, id)
+	db.Find(&post, id)
 
 	err := c.JSON(fiber.Map{"post": post})
 
@@ -59,6 +65,8 @@ func PostShow(c *fiber.Ctx) error {
 }
 
 func PostUpdate(c *fiber.Ctx) error {
+	db := database.DB
+
 	id := c.Params("id")
 
 	var body struct {
@@ -72,12 +80,12 @@ func PostUpdate(c *fiber.Ctx) error {
 	}
 
 	var post models.Post
-	initializers.DB.Find(&post, id)
+	db.Find(&post, id)
 
 	post.Title = body.Title
 	post.Body = body.Body
 
-	result := initializers.DB.Save(&post)
+	result := db.Save(&post)
 
 	if result.Error != nil {
 		err := c.Status(400).JSON(fiber.Map{"error": "Failed to update post"})
@@ -93,11 +101,13 @@ func PostUpdate(c *fiber.Ctx) error {
 }
 
 func PostDelete(c *fiber.Ctx) error {
+	db := database.DB
+
 	id := c.Params("id")
 	var post models.Post
-	initializers.DB.Find(&post, id)
+	db.Find(&post, id)
 
-	result := initializers.DB.Delete(&post)
+	result := db.Delete(&post)
 
 	if result.Error != nil {
 		err := c.Status(400).JSON(fiber.Map{"error": "Failed to delete post"})
