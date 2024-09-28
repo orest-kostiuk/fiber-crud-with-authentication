@@ -32,3 +32,15 @@ func PostsCreate(c *fiber.Ctx) error {
 	}
 	return nil
 }
+
+func PostsIndex(c *fiber.Ctx) error {
+	var posts []models.Post
+	initializers.DB.Find(&posts)
+
+	err := c.JSON(fiber.Map{"posts": posts})
+
+	if err != nil {
+		return err
+	}
+	return nil
+}

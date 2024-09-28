@@ -16,6 +16,7 @@ func main() {
 	app := fiber.New()
 
 	app.Post("/posts", controllers.PostsCreate)
+	app.Get("/posts", controllers.PostsIndex)
 
 	err := app.Listen(":3000")
 	if err != nil {
