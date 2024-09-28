@@ -17,6 +17,7 @@ func main() {
 
 	app.Post("/posts", controllers.PostsCreate)
 	app.Get("/posts", controllers.PostsIndex)
+	app.Get("/posts/:id", controllers.PostShow)
 
 	err := app.Listen(":3000")
 	if err != nil {

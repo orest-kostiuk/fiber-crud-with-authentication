@@ -44,3 +44,16 @@ func PostsIndex(c *fiber.Ctx) error {
 	}
 	return nil
 }
+
+func PostShow(c *fiber.Ctx) error {
+	id := c.Params("id")
+	var post models.Post
+	initializers.DB.Find(&post, id)
+
+	err := c.JSON(fiber.Map{"post": post})
+
+	if err != nil {
+		return err
+	}
+	return nil
+}
