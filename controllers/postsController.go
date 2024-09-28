@@ -57,3 +57,37 @@ func PostShow(c *fiber.Ctx) error {
 	}
 	return nil
 }
+
+func PostUpdate(c *fiber.Ctx) error {
+	id := c.Params("id")
+
+	var body struct {
+		Title string
+		Body  string
+	}
+
+	if err := c.BodyParser(&body); err != nil {
+		err := c.Status(400).JSON(fiber.Map{"error": "Invalid request body"})
+		return err
+	}
+
+	var post models.Post
+	initializers.DB.Find(&post, id)
+
+	post.Title = body.Title
+	post.Body = body.Body
+
+	result := initializers.DB.Save(&post)
+
+	if result.Error != nil {
+		err := c.Status(400).JSON(fiber.Map{"error": "Failed to update post"})
+		return err
+	}
+
+	err := c.JSON(fiber.Map{"post": post})
+
+	if err != nil {
+		return err
+	}
+	return nil
+}
