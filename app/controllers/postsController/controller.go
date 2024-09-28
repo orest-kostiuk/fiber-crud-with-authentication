@@ -1,4 +1,4 @@
-package controllers
+package postsController
 
 import (
 	"github.com/gofiber/fiber/v2"

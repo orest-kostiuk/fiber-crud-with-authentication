@@ -11,3 +11,8 @@ type User struct {
 	Email    string    `gorm:"unique"`
 	Password string
 }
+
+func (u *User) BeforeCreate(tx *gorm.DB) (err error) {
+	u.ID = uuid.New()
+	return
+}
