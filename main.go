@@ -15,11 +15,13 @@ func init() {
 func main() {
 	app := fiber.New()
 
-	app.Post("/posts", controllers.PostsCreate)
-	app.Get("/posts", controllers.PostsIndex)
-	app.Get("/posts/:id", controllers.PostShow)
-	app.Put("/posts/:id", controllers.PostUpdate)
-	app.Delete("/posts/:id", controllers.PostDelete)
+	post_routes := app.Group("/posts")
+
+	post_routes.Post("/", controllers.PostsCreate)
+	post_routes.Get("/", controllers.PostsIndex)
+	post_routes.Get("/:id", controllers.PostShow)
+	post_routes.Put("/:id", controllers.PostUpdate)
+	post_routes.Delete("/:id", controllers.PostDelete)
 
 	err := app.Listen(":3000")
 	if err != nil {
