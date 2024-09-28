@@ -91,3 +91,23 @@ func PostUpdate(c *fiber.Ctx) error {
 	}
 	return nil
 }
+
+func PostDelete(c *fiber.Ctx) error {
+	id := c.Params("id")
+	var post models.Post
+	initializers.DB.Find(&post, id)
+
+	result := initializers.DB.Delete(&post)
+
+	if result.Error != nil {
+		err := c.Status(400).JSON(fiber.Map{"error": "Failed to delete post"})
+		return err
+	}
+
+	err := c.JSON(fiber.Map{"message": "Post deleted"})
+
+	if err != nil {
+		return err
+	}
+	return nil
+}

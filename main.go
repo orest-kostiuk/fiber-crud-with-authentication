@@ -19,6 +19,7 @@ func main() {
 	app.Get("/posts", controllers.PostsIndex)
 	app.Get("/posts/:id", controllers.PostShow)
 	app.Put("/posts/:id", controllers.PostUpdate)
+	app.Delete("/posts/:id", controllers.PostDelete)
 
 	err := app.Listen(":3000")
 	if err != nil {
